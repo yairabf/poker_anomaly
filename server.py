@@ -11,18 +11,34 @@ def get_random_line():
     file.readline() # skip this line to clear the partial line
     return file.readline()
 
-number_of_players = 0
 app = Flask(__name__)
-ans = get_random_line()
+number_of_players = 0
+pot = 0
+is_raised = False
+raised = 0
+current_player = 0
 
+def __playTurn(player_num,task,bet):
+    global current_player
+    global put
+    global raised
+    if(current_player == player_num):
+        if(task==1):
+            if(raised == 0):
+                current_player = (current_player + 1) %2
+        elif(task==2):
+            put =+ raised
+            raised = bet
+    pass
 
 def __addPlayer():
     global number_of_players
     if number_of_players < 2:
         number_of_players += 1
-        return ans
+        return get_random_line()
     else:
         return "game is already started"
+
 
 @app.route("/start")
 def add_player():
@@ -30,19 +46,16 @@ def add_player():
     return ret
 
 
-def __playTurn():
-    pass
-
-
-@app.route("/play/<string:player_num>")
-def play_turn(player_num):
-    ans = __playTurn(player_num)
+@app.route("/play/<string:player_num><int:task>")
+def play_turn(player_num,task):
+    ans = __playTurn(player_num,task)
     return
 
 
-@app.route("/members")
+@app.route("/show")
 def members():
-    return "Members"
+    global pot
+    return str(pot)
 
 
 @app.route("/members/<string:name>/")
