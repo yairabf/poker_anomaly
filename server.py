@@ -1,3 +1,4 @@
+import socketio
 from flask import Flask
 from flask_socketio import SocketIO, emit
 from random import random
@@ -37,8 +38,10 @@ def __playTurn(player_num,task,bet):
                 return "bet is to low"
         elif(task==3):
             winner = (current_player + 1) %2
-
-    pass
+            connect()
+            return "lost"
+        else:
+            return "not your turn"
 
 def __addPlayer():
     global number_of_players

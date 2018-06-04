@@ -12,6 +12,8 @@ while 1:
         conn.request("GET", "/play")
         r2 = conn.getresponse()
         data1 = r2.read()
+        if(data1 == "end"):
+            break
     elif task == 4:
         conn.request("GET", "/show")
         r2 = conn.getresponse()
