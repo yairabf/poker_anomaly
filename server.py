@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_socketio import SocketIO, emit
 from random import random
 import json
 import os, random
@@ -17,18 +18,26 @@ pot = 0
 is_raised = False
 raised = 0
 current_player = 0
+winner = 0
 
 def __playTurn(player_num,task,bet):
     global current_player
     global put
     global raised
+    global winner
     if(current_player == player_num):
         if(task==1):
             if(raised == 0):
                 current_player = (current_player + 1) %2
         elif(task==2):
-            put =+ raised
-            raised = bet
+            if(bet > raised):
+                put =+ raised
+                raised = bet - raised
+            else:
+                return "bet is to low"
+        elif(task==3):
+            winner = (current_player + 1) %2
+
     pass
 
 def __addPlayer():
@@ -62,6 +71,9 @@ def members():
 def getMember(name):
     return name
 
+@socketio.on('connect')
+def connect():
+    emit('message', {'hello': "Hello"})
 
 if __name__ == "__main__":
     app.run()
